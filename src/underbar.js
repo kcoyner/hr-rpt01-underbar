@@ -95,17 +95,48 @@
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
-    //console.log(collection);
-    var notTest = function(item, index){
-      return !test(item);
-    };
-    return _.filter(collection, notTest);
+    
+    // intermediate solution
+    // var notTest = function(item, index){
+    //   return !test(item);
+    // };
+    // return _.filter(collection, notTest);
+
+    return _.filter(collection, function(item, index) {return !test(item);});
     //
   };
 
   // Produce a duplicate-free version of the array.
-  _.uniq = function(array) {
+  _.uniq = function(...array) {
+      var newArray = [];
+    if (array[1]) {
+      // isSorted equals true and we do something faster
+      var newSet = new Set(array[0]);
+      newArray = [...newSet];
+      
+      // this increases the iterator but did not yield correct results
+      // for (let i = 0; i <= array[0].length; i++){
+      //   if (array[0][i] !== array[0][i+1]){
+      //     newArray.push = array[0][i];
+      //     console.log('newArray: ', newArray);
+      //   }
+      // }
+    } else {
+      var newSet = new Set(array[0]);
+      newArray = [...newSet];
+
+      // this works for unsorted arrays but not for sorted arrays
+      // _.each(array[0], function(item, index) {
+      //   if((item in newArray)){
+      //     _.identity(item);
+      //   } else {
+      //     newArray.push(item);
+      //   }
+      // });
+    }
+    return newArray;
   };
+
 
 
   // Return the results of applying an iterator to each element.
@@ -113,6 +144,27 @@
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+    
+      var newArray = [];
+      for (var i = 0; i < collection.length; i++) {
+        newArray.push(iterator(collection[i], i, collection));
+      }
+      return newArray;
+
+    // //  attempt at using reduce:  not-working
+    // // _.reduce(list, iteratee, [memo], [context])
+    // var accum = [];
+    // _.reduce(collection, function(accum, cur) {
+    //   iterator((accum, cur, idx, collection) => accum.push(cur));
+    // }, []);
+    // return accum;
+
+     // // non working attempt -- incomplete  -- returns an array unchanged
+     //  var newArray = [];
+     //  _.each(collection, function(curr, idx, collection) {
+     //      newArray.push(curr);
+     //  });
+     //  return newArray;
   };
 
   /*
@@ -121,7 +173,7 @@
    * as an example of this.
    */
 
-  // Takes an array of objects and returns and array of the values of
+  // Takes an array of objects and returns an array of the values of
   // a certain property in it. E.g. take an array of people and return
   // an array of just their ages
   _.pluck = function(collection, key) {
@@ -154,6 +206,11 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+
+      // for (var i = 0; i < collection.length; i++) {
+      //   newArray.push(iterator(collection[i], i, collection));
+      // }
+
   };
 
   // Determine if the array or object contains a given value (using `===`).
