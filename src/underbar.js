@@ -205,24 +205,39 @@
   //     return total + number * number;
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
+  //
+  // reduce takes 3 arguments, object, function, starting value of accumulator
+	// the callback has two arguments, the accumulator, and the current value
+  //
   _.reduce = function(collection, iterator, accumulator) {
-
-      // for (var i = 0; i < collection.length; i++) {
-      //   newArray.push(iterator(collection[i], i, collection));
-      // }
-
+    var noAccum = arguments.length < 3;
+    _.each(collection, function(elem, index, list){
+      if(noAccum) {
+        noAccum = false;
+        accumulator = elem;
+      } else {
+        accumulator = iterator(accumulator, elem, index, list);
+      }
+    });
+    return accumulator;
   };
+
+
 
   // Determine if the array or object contains a given value (using `===`).
   _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
+    
+    // reduce takes 3 arguments, object, function, starting value of accumulator
+	  // the callback has two arguments, the accumulator, and the current value
     return _.reduce(collection, function(wasFound, item) {
       if (wasFound) {
-        return true;
+        return true;  //if the last iteration of this callback returned true, return true again
       }
-      return item === target;
+      return item === target;   //if the value is equal to the target value, it returns true
     }, false);
+    //false is the starting value of the accumulator - when not provided it starts at collection[0] and the first index to have the callback run on is collection[1]
   };
 
 
