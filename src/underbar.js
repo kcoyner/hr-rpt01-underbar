@@ -95,16 +95,19 @@
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
-    //console.log(collection);
-    var notTest = function(item, index){
-      return !test(item);
-    };
-    return _.filter(collection, notTest);
-    //
+    return _.filter(collection, function(item) {return !test(item);});
+    
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
+    var newArr = [];
+    for (let i = 0; i < array.length; i++) {
+      if (!newArr.includes(array[i])) {
+        newArr.push(array[i]);
+      } 
+    } 
+    return newArr;
   };
 
 
@@ -113,6 +116,12 @@
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+    var newArr = [];
+    for (let i = 0; i < collection.length; i++) {
+      newArr.push(iterator(collection[i]));
+      
+    }
+    return newArr;
   };
 
   /*
@@ -153,7 +162,27 @@
   //     return total + number * number;
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
+  //iterator(accumulated, currentValue, )
+  //[1, 2, 3, 4]
+  //{a: 1, b: 2, c: 3} --> sum 
   _.reduce = function(collection, iterator, accumulator) {
+    if (!Array.isArray(collection) && typeof collection === 'object'){
+      for(var keys in collection){
+        accumulator = iterator(accumulator, collection[keys], keys)
+      }
+    }
+
+    if (arguments.length === 3) {
+      for (let i = 0; i < collection.length; i++) {
+        accumulator = iterator(accumulator, collection[i]);
+      }
+    } else {
+      accumulator = collection[0];
+      for (let i = 1; i < collection.length; i++) {
+        accumulator = iterator(accumulator, collection[i]);
+      }
+    }
+    return accumulator;
   };
 
   // Determine if the array or object contains a given value (using `===`).
@@ -170,9 +199,15 @@
 
 
   // Determine whether all of the elements match a truth test.
+  //[2, 2, 3, 2], =2
   _.every = function(collection, iterator) {
-    // TIP: Try re-using reduce() here.
-  };
+      _.reduce(collection, function(accumulator, currentValue) {
+        if(!(currentValue)){
+          return false;
+        }
+      } );
+      return true;
+    };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
