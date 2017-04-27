@@ -70,13 +70,11 @@
     // implemented for you. Instead of using a standard `for` loop, though,
     // it uses the iteration helper `each`, which you will need to write.
     var result = -1;
-
     _.each(array, function(item, index) {
       if (item === target && result === -1) {
         result = index;
       }
     });
-
     return result;
   };
 
@@ -168,7 +166,7 @@
   _.reduce = function(collection, iterator, accumulator) {
     if (!Array.isArray(collection) && typeof collection === 'object'){
       for(var keys in collection){
-        accumulator = iterator(accumulator, collection[keys], keys)
+        accumulator = iterator(accumulator, collection[keys], keys);
       }
     }
 
@@ -197,17 +195,30 @@
     }, false);
   };
 
-
   // Determine whether all of the elements match a truth test.
-  //[2, 2, 3, 2], =2
+  // iterator(accumulated, currentValue, )
+  // [2, 2, 3, 2], = 2
+  // iterator is an optional argument and is called 'predicate' in original
+  //   underscore
   _.every = function(collection, iterator) {
-      _.reduce(collection, function(accumulator, currentValue) {
-        if(!(currentValue)){
+    if (arguments.length > 1) {
+      // we have a callback in the form of iterator
+      return _.reduce(collection, function(accum, curr) {
+          if(!iterator(curr)){
+            return false;  // returns to _.every
+          }
+          return accum; // must return accum from _.reduce if not kicked out in 'if' statement
+        }, true );
+    } else {
+      // we do not have a callback so simply test if curr is T/F
+      return _.reduce(collection, function(accum, curr){
+        if (curr !== true) {
           return false;
         }
-      } );
-      return true;
-    };
+        return accum;
+      }, true);
+    }
+  };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
