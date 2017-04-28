@@ -110,10 +110,10 @@
 
 
   // Return the results of applying an iterator to each element.
-  _.map = function(collection, iterator) {
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+  _.map = function(collection, iterator) {
     var newArr = [];
     for (let i = 0; i < collection.length; i++) {
       newArr.push(iterator(collection[i]));
@@ -132,9 +132,6 @@
   // a certain property in it. E.g. take an array of people and return
   // an array of just their ages
   _.pluck = function(collection, key) {
-    // TIP: map is really handy when you want to transform an array of
-    // values into a new array of values. _.pluck() is solved for you
-    // as an example of this.
     return _.map(collection, function(item){
       return item[key];
     });
@@ -161,26 +158,31 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   //iterator(accumulated, currentValue, )
-  //[1, 2, 3, 4]
-  //{a: 1, b: 2, c: 3} --> sum 
-  _.reduce = function(collection, iterator, accumulator) {
-    if (!Array.isArray(collection) && typeof collection === 'object'){
-      for(var keys in collection){
-        accumulator = iterator(accumulator, collection[keys], keys);
-      }
-    }
+  
+/* Lily's solution
+_.reduce = function(collection, iterator, acc) {
+    acc = acc === undefined ? _.first(collection) : acc;
+    return _.last(_.map(collection, function(item) {
+      return acc = iterator(acc, item);
+    }));
+  };
+*/
 
+  _.reduce = function(collection, iterator, accum) {
     if (arguments.length === 3) {
-      for (let i = 0; i < collection.length; i++) {
-        accumulator = iterator(accumulator, collection[i]);
-      }
+      _.each(collection, function(curr){
+        accum = iterator(accum, curr);
+      });
     } else {
-      accumulator = collection[0];
-      for (let i = 1; i < collection.length; i++) {
-        accumulator = iterator(accumulator, collection[i]);
-      }
+      _.each(collection, function(curr, key){
+        if (key === 0){
+          accum = collection[0];
+        } else {
+          accum = iterator(accum, curr, key);
+        }
+      });
     }
-    return accumulator;
+    return accum;
   };
 
   // Determine if the array or object contains a given value (using `===`).
