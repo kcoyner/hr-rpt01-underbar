@@ -115,10 +115,9 @@
     // the members, it also maintains an array of results.
   _.map = function(collection, iterator) {
     var newArr = [];
-    for (let i = 0; i < collection.length; i++) {
-      newArr.push(iterator(collection[i]));
-      
-    }
+    _.each(collection, function(item){
+      newArr.push(iterator(item));
+    });
     return newArr;
   };
 
