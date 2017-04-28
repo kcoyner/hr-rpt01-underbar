@@ -100,11 +100,11 @@
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
     var newArr = [];
-    for (let i = 0; i < array.length; i++) {
-      if (!newArr.includes(array[i])) {
-        newArr.push(array[i]);
-      } 
-    } 
+    _.each(array, function(item){
+      if (!newArr.includes(item)) {
+        newArr.push(item);
+      }
+    });
     return newArr;
   };
 
