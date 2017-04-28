@@ -48,7 +48,6 @@
 
   // Call iterator(value, key, collection) for each element of collection.
   // Accepts both arrays and objects.
-  //
   // Note: _.each does not have a return value, but rather simply runs the
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
@@ -65,10 +64,10 @@
 
   // Returns the index at which value can be found in the array, or -1 if value
   // is not present in the array.
-  _.indexOf = function(array, target){
     // TIP: Here's an example of a function that needs to iterate, which we've
     // implemented for you. Instead of using a standard `for` loop, though,
     // it uses the iteration helper `each`, which you will need to write.
+  _.indexOf = function(array, target){
     var result = -1;
     _.each(array, function(item, index) {
       if (item === target && result === -1) {
@@ -81,7 +80,7 @@
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
     var newArray = [];
-    _.each(collection, function(item, index) {
+    _.each(collection, function(item) {
       if(test(item)){
         newArray.push(item);
       }
@@ -90,11 +89,10 @@
   };
 
   // Return all elements of an array that don't pass a truth test.
-  _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
+  _.reject = function(collection, test) {
     return _.filter(collection, function(item) {return !test(item);});
-    
   };
 
   // Produce a duplicate-free version of the array.
@@ -185,9 +183,9 @@ _.reduce = function(collection, iterator, acc) {
   };
 
   // Determine if the array or object contains a given value (using `===`).
-  _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
+  _.contains = function(collection, target) {
     return _.reduce(collection, function(wasFound, item) {
       if (wasFound) {
         return true;
@@ -225,9 +223,9 @@ _.reduce = function(collection, iterator, acc) {
   // provided, provide a default one
   _.some = function(collection, iterator) {
     iterator = iterator || _.identity;
-    return !_.every(collection, function(curr){
-      return !iterator(curr);
-    } );
+    return !_.every(collection, function(item){
+      return !iterator(item); 
+    });
   };
 
 
