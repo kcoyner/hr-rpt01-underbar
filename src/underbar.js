@@ -199,7 +199,7 @@
   // iterator(accumulated, currentValue, )
   // [2, 2, 3, 2], = 2
   // iterator is an optional argument and is called 'predicate' in original
-  //   underscore
+  //   underscore _.every
   _.every = function(collection, iterator) {
     if (arguments.length > 1) {
       // we have a callback in the form of iterator
@@ -223,8 +223,12 @@
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
-    // TIP: There's a very clever way to re-use every() here.
+    iterator = iterator || _.identity;
+    return !_.every(collection, function(curr){
+      return !iterator(curr);
+    } );
   };
+
 
 
   /**
@@ -246,6 +250,12 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    _.each(arguments, function (extendObj) {
+      for (var key in extendObj) {
+        obj[key] = extendObj[key];
+      }
+    });
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
