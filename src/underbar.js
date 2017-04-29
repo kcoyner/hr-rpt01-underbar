@@ -248,18 +248,31 @@ _.reduce = function(collection, iterator, acc) {
   //   }, {
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
-  _.extend = function(obj) {
+  _.extend = function(objs) {
     _.each(arguments, function (extendObj) {
       for (var key in extendObj) {
-        obj[key] = extendObj[key];
+        objs[key] = extendObj[key];
       }
     });
-    return obj;
+    return objs;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
-  _.defaults = function(obj) {
+    // convert arguments to a real array
+    // when checking values, use Boolean(value)
+  _.defaults = function(objs) {
+    var args = [].slice.call(arguments);
+    _.each(args, function(extendObj){
+      for (let key in extendObj){
+        if (key in objs) {
+          _.identity(objs[key]);
+        } else {
+          objs[key] = extendObj[key];
+        }
+      }
+    });
+    return objs;
   };
 
 
