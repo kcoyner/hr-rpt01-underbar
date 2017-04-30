@@ -155,7 +155,7 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   //iterator(accumulated, currentValue, )
-  
+
 /* Lily's solution
 _.reduce = function(collection, iterator, acc) {
     acc = acc === undefined ? _.first(collection) : acc;
@@ -224,7 +224,7 @@ _.reduce = function(collection, iterator, acc) {
   _.some = function(collection, iterator) {
     iterator = iterator || _.identity;
     return !_.every(collection, function(item){
-      return !iterator(item); 
+      return !iterator(item);
     });
   };
 
@@ -286,23 +286,23 @@ _.reduce = function(collection, iterator, acc) {
 
   // Return a function that can be called at most one time. Subsequent calls
   // should return the previously returned value.
-  _.once = function(func) {
     // TIP: These variables are stored in a "closure scope" (worth researching),
     // so that they'll remain available to the newly-generated function every
     // time it's called.
-    var alreadyCalled = false;
-    var result;
 
     // TIP: We'll return a new function that delegates to the old one, but only
     // if it hasn't been called before.
-    return function() {
-      if (!alreadyCalled) {
         // TIP: .apply(this, arguments) is the standard way to pass on all of the
         // infromation from one function call to another.
+      // The new function always returns the originally computed result.
+  _.once = function(func) {
+    var alreadyCalled = false;
+    var result;
+    return function() {
+      if (!alreadyCalled) {
         result = func.apply(this, arguments);
         alreadyCalled = true;
       }
-      // The new function always returns the originally computed result.
       return result;
     };
   };
@@ -316,17 +316,36 @@ _.reduce = function(collection, iterator, acc) {
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var cache = {
+      // '[1,2,3]': 6, <-- are diff  a right nowl like the main character of interstella right now
+      // '1,2,3': 6    < --
+    };
+    return function(){
+      var args = Array.from(arguments).toString();
+      if (Array.isArray(arguments[0])) { // "Mr. Rabbit, are you an array?"
+        args = "[" + args + "]";
+      }// console.log(this.me);
+      return cache[args] = (args in cache) ? cache[args] : func.apply(null, arguments);
+    };
   };
+/*
+demonstratoin of this.
 
+*/
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
   //
   // The arguments for the original function are passed after the wait
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
-  _.delay = function(func, wait) {
-  };
+  _.delay = function(func, waiting) {
 
+    var args = Array.prototype.slice.call(arguments, 2); // means this --> arguments.slice(2);
+    return setTimeout(function(){
+      func.apply(null, args);
+    }, waiting);
+
+  };
 
   /**
    * ADVANCED COLLECTION OPERATIONS
@@ -339,8 +358,20 @@ _.reduce = function(collection, iterator, acc) {
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
-  };
 
+    var clone = array.slice();
+    for (var i = 0; i < clone.length; i++) {
+      var pos = Math.floor(Math.random() * clone.length);
+      var temp = clone[i];
+      clone[i] = clone[pos];
+      clone[pos] = temp;
+    }
+    return clone;
+  };
+  // Math.floor(m)
+    // access random index in array
+      //iterate thr      // put randomi  index into element
+       // get new random number?u clone
 
   /**
    * ADVANCED
