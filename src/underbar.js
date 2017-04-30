@@ -368,10 +368,6 @@ demonstratoin of this.
     }
     return clone;
   };
-  // Math.floor(m)
-    // access random index in array
-      //iterate thr      // put randomi  index into element
-       // get new random number?u clone
 
   /**
    * ADVANCED
@@ -381,10 +377,25 @@ demonstratoin of this.
    * but nothing beyond here is required.
    */
 
+
+//   _.invoke([[5,1,7],[3,2,1]]), 'sort');
+//   _.invoke('a string','another string'), 'toUpperCase');
+//   [[1,5,7],[1,2,3]]
+
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
+
+  //runs the input function on each item in the array, and returns a list of results
+
   _.invoke = function(collection, functionOrKey, args) {
+    return _.map(collection, function(elem){
+     return (functionOrKey instanceof Function) ? functionOrKey.apply(elem, args) :
+      //elem[key].apply(elem, args)
+      elem[functionOrKey](args);
+    });
   };
+
+  //Kevin, we were oh so close so I have included the working line and our previous line. We overthot it, surprise.
 
   // Sort the object's values by a criterion produced by an iterator.
   // If iterator is a string, sort objects by that property with the name
