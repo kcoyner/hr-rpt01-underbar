@@ -319,9 +319,9 @@
 
         _.defaults(destination, source);
 
-        expect(destination.a).to.equal('')
+        expect(destination.a).to.equal('');
         expect(destination.b).to.equal(0);
-        expect(isNaN(destination.c)).to.equal(true)
+        expect(isNaN(destination.c)).to.equal(true);
       });
 
       it('should copy properties source an arbitrary number of source objects', function() {
@@ -366,7 +366,7 @@
         var noop = _.once(function() {});
 
         expect(noop).to.be.an.instanceOf(Function);
-      })
+      });
 
       it('should only run a user-defined function if it has not been run before', function() {
         var num = 0;
