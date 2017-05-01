@@ -358,14 +358,13 @@ demonstratoin of this.
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
-
     var clone = array.slice();
-    for (var i = 0; i < clone.length; i++) {
-      var pos = Math.floor(Math.random() * clone.length);
-      var temp = clone[i];
-      clone[i] = clone[pos];
+    _.each(clone, function(num, idx) {
+      let pos = Math.floor(Math.random() * clone.length);
+      let temp = num;
+      clone[idx] = clone[pos];
       clone[pos] = temp;
-    }
+    });
     return clone;
   };
 
@@ -389,6 +388,8 @@ demonstratoin of this.
 
   _.invoke = function(collection, functionOrKey, args) {
     return _.map(collection, function(elem){
+      console.log('collection: ', collection);
+      console.log(functionOrKey);
      return (functionOrKey instanceof Function) ? functionOrKey.apply(elem, args) :
       //elem[key].apply(elem, args)
       elem[functionOrKey](args);
