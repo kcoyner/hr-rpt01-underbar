@@ -77,6 +77,9 @@
     return result;
   };
 
+
+
+
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
     var newArray = [];
@@ -358,14 +361,13 @@ demonstratoin of this.
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
-
     var clone = array.slice();
-    for (var i = 0; i < clone.length; i++) {
-      var pos = Math.floor(Math.random() * clone.length);
-      var temp = clone[i];
-      clone[i] = clone[pos];
+    _.each(clone, function(num, idx) {
+      let pos = Math.floor(Math.random() * clone.length);
+      let temp = num;
+      clone[idx] = clone[pos];
       clone[pos] = temp;
-    }
+    });
     return clone;
   };
 
@@ -389,6 +391,8 @@ demonstratoin of this.
 
   _.invoke = function(collection, functionOrKey, args) {
     return _.map(collection, function(elem){
+      // console.log('collection: ', collection);
+      // console.log(functionOrKey);
      return (functionOrKey instanceof Function) ? functionOrKey.apply(elem, args) :
       //elem[key].apply(elem, args)
       elem[functionOrKey](args);
@@ -402,7 +406,33 @@ demonstratoin of this.
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
+    // input: obj and sorter
+    // output: array
+    var newArr = [];
+    if (typeof iterator === 'string') {
+      // it's a string, and we use the string to sort by
+      // sort objs by that string prop name (i.e. 'length')
+      // console.log('item.: ', item);
+      // console.log('iterator: ', iterator);
+      _.each(collection, function(item){
+        // build a sort here where iterator === length (as an example)
+          // console.log('item.: ', item);
+      });
+      newArr.push(iterator(item));
+    } else {  // it's a Function, so sort by whatever is in function(item)
+      // then iterator is our sorting function
+      _.each(collection, function(item, key){
+        // console.log('iterator: ', iterator);
+        // console.log('iterator(item, key): ', iterator(item, key));
+      });
+      newArr.push(iterator(item));
+    }
+    return newArr;
   };
+
+
+
+
 
   // Zip together two or more arrays with elements of the same index
   // going together.
