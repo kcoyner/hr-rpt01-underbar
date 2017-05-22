@@ -67,7 +67,7 @@
     // TIP: Here's an example of a function that needs to iterate, which we've
     // implemented for you. Instead of using a standard `for` loop, though,
     // it uses the iteration helper `each`, which you will need to write.
-  _.indexOf = function(array, target){
+  _.indexOf = function(array, target) {
     var result = -1;
     _.each(array, function(item, index) {
       if (item === target && result === -1) {
@@ -82,13 +82,13 @@
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
-    var newArray = [];
-    _.each(collection, function(item) {
-      if(test(item)){
-        newArray.push(item);
-      }
-    });
-    return newArray;
+  var result = [];
+  _.each(collection,function(item) {
+    if(test(item)) {
+      result.push(item);
+    }
+  })
+  return result;
   };
 
   // Return all elements of an array that don't pass a truth test.
@@ -101,7 +101,7 @@
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
     var newArr = [];
-    _.each(array, function(item){
+    _.each(array, function(item) {
       if (!newArr.includes(item)) {
         newArr.push(item);
       }
@@ -115,11 +115,11 @@
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
   _.map = function(collection, iterator) {
-    var newArr = [];
-    _.each(collection, function(item){
-      newArr.push(iterator(item));
-    });
-    return newArr;
+  var newArr = [];
+  _.each(collection,function(item){
+    newArr.push(iterator(item));
+  })
+  return newArr;
   };
 
   /*
@@ -169,19 +169,15 @@ _.reduce = function(collection, iterator, acc) {
 */
 
   _.reduce = function(collection, iterator, accum) {
-    if (arguments.length === 3) {
-      _.each(collection, function(curr){
-        accum = iterator(accum, curr);
-      });
-    } else {
-      _.each(collection, function(curr, key){
-        if (key === 0){
-          accum = collection[0];
-        } else {
-          accum = iterator(accum, curr, key);
-        }
-      });
-    }
+    var arg = arguments;
+    _.each(collection, function(item){
+      if (arg.length === 2){
+        accum = item;
+        arg.length++;
+      } else {
+        accum = iterator(accum, item);
+      }
+    })
     return accum;
   };
 
@@ -221,6 +217,17 @@ _.reduce = function(collection, iterator, acc) {
       }, true);
     }
   };
+
+  // _.every = function(collection,iterator){
+  //   iterator = iterator || _.identity;
+  //   return _.reduce(collection,function(accum,curr){
+  //     if(!iterator(curr)){   // if (curr !== false)
+  //       accum = false;
+  //     }
+  //     return accum;
+  //   },true)
+
+  // }
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
@@ -278,7 +285,6 @@ _.reduce = function(collection, iterator, acc) {
     return objs;
   };
 
-
   /**
    * FUNCTIONS
    * =========
@@ -310,6 +316,7 @@ _.reduce = function(collection, iterator, acc) {
     };
   };
 
+
   // Memorize an expensive function's results by storing them. You may assume
   // that the function only takes primitives as arguments.
   // memoize could be renamed to oncePerUniqueArgumentList; memoize does the
@@ -318,19 +325,31 @@ _.reduce = function(collection, iterator, acc) {
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
+
+  // _.memoize = function(func) {
+  //   var cache = {};
+  //   return function(){
+  //     var args = Array.from(arguments).toString();
+  //     if (Array.isArray(arguments[0])) {
+  //       args = "[" + args + "]";
+  //     }
+  //     return cache[args] = (args in cache) ? cache[args] : func.apply(null, arguments);
+  //   };
+  // };
+
   _.memoize = function(func) {
-    var cache = {
-      // '[1,2,3]': 6, <-- are diff  a right nowl like the main character of interstella right now
-      // '1,2,3': 6    < --
-    };
+    var cache = {};
     return function(){
-      var args = Array.from(arguments).toString();
-      if (Array.isArray(arguments[0])) { // "Mr. Rabbit, are you an array?"
-        args = "[" + args + "]";
-      }// console.log(this.me);
-      return cache[args] = (args in cache) ? cache[args] : func.apply(null, arguments);
-    };
-  };
+      var arg = JSON.stringify(arguments);
+      if(cache[arg] === undefined){
+        return cache[arg] = func.apply(this, arguments);
+      } else {
+        return cache[arg];
+      }
+    }
+  }
+
+
 /*
 demonstratoin of this.
 
